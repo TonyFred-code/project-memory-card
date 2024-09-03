@@ -74,6 +74,11 @@ button:focus-visible {
   box-sizing: content-box;
 }
 
+.icon-container__large {
+  width: 4rem;
+  height: 4rem;
+}
+
 .btn-icon {
   padding: 0.6rem 0.8rem;
   box-sizing: content-box;
