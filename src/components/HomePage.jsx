@@ -1,9 +1,45 @@
 import { mdiHelp, mdiPlay, mdiBookAccount, mdiBrain } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
+import GamePlay from './GamePlay';
+import { useState } from 'react';
 // import BrainUrl from '/brain.jpeg';
 
 function HomePage() {
+  const [pageOpen, setPageOpen] = useState({
+    gamePlayPage: false,
+  });
+
+  function openGamePlayPage() {
+    const pagesKey = Object.keys(pageOpen);
+    const nextPages = { ...pageOpen };
+
+    pagesKey.forEach((page) => {
+      if (page === 'gamePlayPage') {
+        nextPages[page] = true;
+      } else {
+        nextPages[page] = false;
+      }
+    });
+
+    setPageOpen(nextPages);
+  }
+
+  function closeGamePlayPage() {
+    const pagesKey = Object.keys(pageOpen);
+    const nextPages = { ...pageOpen };
+
+    pagesKey.forEach((page) => {
+      nextPages[page] = false;
+    });
+
+    setPageOpen(nextPages);
+  }
+
+  if (pageOpen.gamePlayPage) {
+    return <GamePlay onClose={closeGamePlayPage} />;
+  }
+
   return (
     <div className='home-page d-flex__col gap_2r align-items__center justify-content__center'>
       <div>
@@ -18,6 +54,7 @@ function HomePage() {
             <button
               type='button'
               className='btn home-page-btn d-flex__row gap_1r align-items__center'
+              onClick={openGamePlayPage}
             >
               <Icon path={mdiPlay} size={2} />
               <span className='text-transform__capitalize'>play</span>
