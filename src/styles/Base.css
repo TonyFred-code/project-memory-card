@@ -202,11 +202,14 @@ button:focus-visible {
 
   .btn-icon {
     padding: 0.6rem 1.2rem;
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
   }
 
-  .btn-icon .icon-container {
+  /* .btn-icon .icon-container {
     display: none;
-  }
+  } */
 
   .btn .icon-text {
     display: inline-block;
