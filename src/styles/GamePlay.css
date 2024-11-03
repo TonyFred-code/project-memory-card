@@ -1,0 +1,22 @@
+.game-area {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.game-area header {
+  gap: 0.4rem;
+}
+
+.bar-container {
+  height: 1.5rem;
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid;
+}
+
+.bar {
+  height: 100%;
+  width: 10%;
+  border-radius: 100px;
+  background-color: blue;
+}
