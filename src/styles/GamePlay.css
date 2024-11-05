@@ -7,6 +7,11 @@
   gap: 0.4rem;
 }
 
+.score-container,
+.timer-container {
+  gap: 0.5rem;
+}
+
 .bar-container {
   height: 1.5rem;
   width: 100%;
@@ -19,4 +24,24 @@
   width: 10%;
   border-radius: 100px;
   background-color: blue;
+}
+
+.game-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 3rem;
+  padding: 3rem;
+}
+
+.card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+}
+
+.card-image {
+  width: 100px;
+  height: 100px;
+  max-width: 100px;
+  max-height: 100px;
 }
