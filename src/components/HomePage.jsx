@@ -3,12 +3,25 @@ import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import GamePlay from './GamePlay';
 import { useState } from 'react';
-// import BrainUrl from '/brain.jpeg';
 
 function HomePage() {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
   });
+  const [highScore, setHighScore] = useState(0);
+  const [bestTime, setBestTime] = useState(+Infinity);
+
+  function handleUpdateHighScore(score) {
+    if (score < highScore) return;
+
+    setHighScore(score);
+  }
+
+  function handleUpdateBestTime(time) {
+    if (time > bestTime) return;
+
+    setBestTime(time);
+  }
 
   function openGamePlayPage() {
     const pagesKey = Object.keys(pageOpen);
@@ -37,7 +50,15 @@ function HomePage() {
   }
 
   if (pageOpen.gamePlayPage) {
-    return <GamePlay onClose={closeGamePlayPage} />;
+    return (
+      <GamePlay
+        onClose={closeGamePlayPage}
+        handleUpdateBestTime={handleUpdateBestTime}
+        handleUpdateHighScore={handleUpdateHighScore}
+        highScore={highScore}
+        bestTime={bestTime}
+      />
+    );
   }
 
   return (
