@@ -127,6 +127,10 @@ button:focus-visible {
   justify-content: flex-end;
 }
 
+.gap_d3r {
+  gap: 0.3rem;
+}
+
 .gap_1r {
   gap: 1rem;
 }
@@ -173,6 +177,10 @@ button:focus-visible {
 
 .text-transform__uppercase {
   text-transform: uppercase;
+}
+
+.text-transform__lowercase {
+  text-transform: lowercase;
 }
 
 .font-weight__bold {
