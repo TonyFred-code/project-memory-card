@@ -226,6 +226,6 @@ button:focus-visible {
 
 @media (min-width: 900px) {
   html {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
