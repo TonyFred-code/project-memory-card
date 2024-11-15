@@ -59,7 +59,19 @@ function GamePlay({
     };
   }, [gameWon, gameLost]);
 
-  function handleGameRestart() {}
+  function handleGameRestart() {
+    setViewed([]);
+    setNotViewed(placeHolderDataCode);
+    setPlayCards(pickRandom(placeHolderDataCode, { count: 4 }));
+    setGameWon(false);
+    setGameLost(false);
+    setGameEndModalOpen(false);
+    setTime(0);
+    setLastScoreTime(0);
+    setScore(0);
+    setScoreIncrease(0);
+    setIsScoreIncrease(false);
+  }
 
   function handleCardClick(code) {
     if (gameWon || gameLost) return;
@@ -117,6 +129,7 @@ function GamePlay({
         <button
           type='button'
           className='btn btn-icon d-flex__row gap_1r align-items__center'
+          onClick={handleGameRestart}
         >
           <span className='icon-container'>
             <Icon path={mdiReload} size={2} />
