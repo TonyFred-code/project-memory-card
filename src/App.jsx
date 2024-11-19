@@ -22,6 +22,10 @@ function App() {
     'flags',
   ];
 
+  const CACHE_KEY = 'emoji_cache';
+  const CACHE_TIME_KEY = 'emoji_cache_time';
+  const CACHE_EXPIRATION = 60 * 60 * 1000; // 1 hour in milliseconds
+
   useEffect(() => {
     async function fetchEmojis() {
       try {
@@ -42,15 +46,46 @@ function App() {
         }
 
         const data = await response.json();
-        setEmojis(data);
-        setIsLoading(false);
+
+        // Store data and timestamp in localStorage
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+
+        return data;
       } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
+        throw err;
       }
     }
 
-    fetchEmojis();
+    function loadCachedEmojis() {
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+
+      if (cachedData && cachedTime) {
+        const timeElapsed = Date.now() - parseInt(cachedTime, 10);
+        if (timeElapsed < CACHE_EXPIRATION) {
+          return JSON.parse(cachedData); // Use cached data if it's still valid
+        }
+      }
+      return null; // Cache is invalid or non-existent
+    }
+
+    const cachedEmojis = loadCachedEmojis();
+
+    if (cachedEmojis) {
+      setEmojis(cachedEmojis);
+      setIsLoading(false);
+    } else {
+      fetchEmojis()
+        .then((data) => {
+          setEmojis(data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setError(err.message);
+          setIsLoading(false);
+        });
+    }
   }, []);
 
   if (isLoading) return <Loader loading={isLoading} />;
