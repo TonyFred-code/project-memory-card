@@ -9,7 +9,6 @@ import {
 } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/GamePlay.css';
-import placeHolderData from '../assets/data.js';
 import pickRandom from 'pick-random';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
@@ -22,16 +21,17 @@ function GamePlay({
   handleUpdateHighScore,
   handleUpdateBestTime,
   bestTime,
+  emojis,
 }) {
-  const placeHolderDataCode = placeHolderData.map((data) => {
+  const emojisCode = emojis.map((data) => {
     const { code } = data;
 
     return code;
   });
   const [viewed, setViewed] = useState([]);
-  const [notViewed, setNotViewed] = useState(placeHolderDataCode);
+  const [notViewed, setNotViewed] = useState(emojisCode);
   const [playCards, setPlayCards] = useState(
-    pickRandom(placeHolderDataCode, { count: 4 })
+    pickRandom(emojisCode, { count: 4 })
   );
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
@@ -61,8 +61,8 @@ function GamePlay({
 
   function handleGameRestart() {
     setViewed([]);
-    setNotViewed(placeHolderDataCode);
-    setPlayCards(pickRandom(placeHolderDataCode, { count: 4 }));
+    setNotViewed(emojisCode);
+    setPlayCards(pickRandom(emojisCode, { count: 4 }));
     setGameWon(false);
     setGameLost(false);
     setGameEndModalOpen(false);
@@ -209,7 +209,7 @@ function GamePlay({
           </div>
         </header>
         <div className='game-cards'>
-          {placeHolderData
+          {emojis
             .filter((data) => playCards.includes(data.code))
             .map((data) => {
               const { image, name, code } = data;

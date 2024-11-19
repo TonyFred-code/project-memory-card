@@ -4,7 +4,7 @@ import '../styles/HomePage.css';
 import GamePlay from './GamePlay';
 import { useState } from 'react';
 
-function HomePage() {
+function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
   });
@@ -57,6 +57,7 @@ function HomePage() {
         handleUpdateHighScore={handleUpdateHighScore}
         highScore={highScore}
         bestTime={bestTime}
+        emojis={emojis}
       />
     );
   }
