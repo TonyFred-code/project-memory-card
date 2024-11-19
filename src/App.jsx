@@ -3,6 +3,7 @@ import HomePage from './components/HomePage';
 import Loader from './components/Loader.jsx';
 import './styles/Base.css';
 import pickRandom from 'pick-random';
+import randomInteger from 'random-int';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,7 @@ function App() {
   const CACHE_KEY = 'emoji_cache';
   const CACHE_TIME_KEY = 'emoji_cache_time';
   const CACHE_EXPIRATION = 60 * 60 * 1000; // 1 hour in milliseconds
+  const LOADER_DURATION = randomInteger(1099, 1900);
 
   useEffect(() => {
     async function fetchEmojis() {
@@ -74,16 +76,22 @@ function App() {
 
     if (cachedEmojis) {
       setEmojis(cachedEmojis);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, LOADER_DURATION);
     } else {
       fetchEmojis()
         .then((data) => {
           setEmojis(data);
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, LOADER_DURATION);
         })
         .catch((err) => {
           setError(err.message);
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, LOADER_DURATION);
         });
     }
   }, []);
