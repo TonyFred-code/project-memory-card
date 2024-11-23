@@ -1,8 +1,8 @@
-import { mdiHelp, mdiPlay, mdiBookAccount, mdiBrain } from '@mdi/js';
+import { mdiHelp, mdiPlay, mdiBookAccount } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
-import GamePlay from './GamePlay';
 import { useState } from 'react';
+import GamePlay from './GamePlay';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
