@@ -14,6 +14,7 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
+// import Tilt from 'react-parallax-tilt';
 
 function GamePlay({
   onClose,
@@ -41,6 +42,7 @@ function GamePlay({
   const [score, setScore] = useState(0);
   const [scoreIncrease, setScoreIncrease] = useState(0);
   const [isScoreIncrease, setIsScoreIncrease] = useState(false);
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
   let scoreTimeDiff = time - lastScoreTime;
   if (scoreTimeDiff > 15000) scoreTimeDiff = 15000;
   const bonusScorePercent = 100 - Math.floor((scoreTimeDiff * 100) / 15000);
@@ -49,7 +51,9 @@ function GamePlay({
   const maxBonusScore = 1500;
 
   useEffect(() => {
-    if (gameWon || gameLost) return null;
+    if (gameWon || gameLost || isCardFlipped) {
+      return undefined;
+    }
 
     const key = setInterval(() => {
       setTime((t) => 1000 + t);
@@ -58,7 +62,7 @@ function GamePlay({
     return () => {
       clearInterval(key);
     };
-  }, [gameLost, gameWon]);
+  }, [gameLost, gameWon, isCardFlipped]);
 
   function handleGameRestart() {
     setViewed([]);
@@ -76,6 +80,8 @@ function GamePlay({
 
   function handleCardClick(code) {
     if (gameWon || gameLost) return;
+
+    if (isCardFlipped) return;
 
     if (viewed.includes(code)) {
       setGameLost(true);
@@ -118,10 +124,15 @@ function GamePlay({
     setLastScoreTime(time);
     setScoreIncrease(cardPoint + bonusScore);
     setIsScoreIncrease(true);
+    setIsCardFlipped(true);
+
+    setTimeout(() => {
+      setIsCardFlipped(false);
+    }, 1300);
   }
 
   function handleCardKeyDown(e, code) {
-    if (e.key.code === 13) {
+    if (e.keyCode === 13) {
       handleCardClick(code);
     }
   }
@@ -215,14 +226,14 @@ function GamePlay({
             </div>
           </div>
         </header>
-        <div className="game-cards">
+        <div className="game-cards justify-content__center align-items__center">
           {emojis
             .filter((data) => playCards.includes(data.code))
             .map((data) => {
               const { image, name, code } = data;
               return (
                 <div
-                  className="card d-flex__col align-items__center justify-content__center cursor__pointer padding_2r gap_1r"
+                  className={`card d-flex__col align-items__center justify-content__center cursor__pointer padding_1r ${isCardFlipped ? 'flipped' : ''}`}
                   key={code}
                   onClick={() => {
                     handleCardClick(code);
@@ -233,10 +244,14 @@ function GamePlay({
                     handleCardKeyDown(e, code);
                   }}
                 >
-                  <div className="card-image">
-                    <img src={image} alt={name} />
+                  <div className="wrapper">
+                    <div className="card-front d-flex__col align-items__center justify-content__center">
+                      <div className="card-image">
+                        <img src={image} alt={name} />
+                      </div>
+                    </div>
+                    <div className="card-back" />
                   </div>
-                  <div className="card-text">{code}</div>
                 </div>
               );
             })}
