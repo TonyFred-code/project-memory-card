@@ -120,6 +120,12 @@ function GamePlay({
     setIsScoreIncrease(true);
   }
 
+  function handleCardKeyDown(e, code) {
+    if (e.key.code === 13) {
+      handleCardClick(code);
+    }
+  }
+
   function handlePageClose() {
     onClose();
   }
@@ -221,6 +227,11 @@ function GamePlay({
                   onClick={() => {
                     handleCardClick(code);
                   }}
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={(e) => {
+                    handleCardKeyDown(e, code);
+                  }}
                 >
                   <div className="card-image">
                     <img src={image} alt={name} />
@@ -242,7 +253,7 @@ function GamePlay({
           <header>
             {gameLost && (
               <h1 className="text-transform__capitalize">
-                <span>that's a pity! you lost</span>
+                <span>that&apos;s a pity! you lost</span>
               </h1>
             )}
 
