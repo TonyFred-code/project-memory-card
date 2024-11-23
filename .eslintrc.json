@@ -39,6 +39,9 @@
     "no-debugger": "error",
     "consistent-return": "warn",
     "react/jsx-no-bind": "off",
+    "import/no-commonjs": "error",
+    "no-var": "error",
+    "prefer-const": "error",
     "no-unused-vars": "warn"
     // "import/extensions": [
     //   "error",
