@@ -55,13 +55,13 @@ function App() {
       return data;
     }
 
-    function loadCachedEmojis() {
+    function loadCachedEmojis(offline = false) {
       const cachedData = localStorage.getItem(CACHE_KEY);
       const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
 
       if (cachedData && cachedTime) {
         const timeElapsed = Date.now() - parseInt(cachedTime, 10);
-        if (timeElapsed < CACHE_EXPIRATION) {
+        if (timeElapsed < CACHE_EXPIRATION || offline) {
           return JSON.parse(cachedData); // Use cached data if it's still valid
         }
       }
@@ -84,7 +84,13 @@ function App() {
           }, LOADER_DURATION);
         })
         .catch((err) => {
-          setError(err.message);
+          const backUp = loadCachedEmojis(true);
+
+          if (backUp) {
+            setEmojis(backUp);
+          } else {
+            setError(err.message);
+          }
           setTimeout(() => {
             setIsLoading(false);
           }, LOADER_DURATION);
