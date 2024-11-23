@@ -42,7 +42,11 @@
     "import/no-commonjs": "error",
     "no-var": "error",
     "prefer-const": "error",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["vite.config.js"] }
+    ]
     // "import/extensions": [
     //   "error",
     //   "always", // Enforce file extensions in imports
