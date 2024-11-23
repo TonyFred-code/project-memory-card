@@ -34,8 +34,21 @@
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/react-in-jsx-scope": "off",
     "no-console": "warn",
     "no-debugger": "error",
-    "consistent-return": "warn"
+    "consistent-return": "warn",
+    "react/jsx-no-bind": "off",
+    "no-unused-vars": "warn"
+    // "import/extensions": [
+    //   "error",
+    //   "always", // Enforce file extensions in imports
+    //   {
+    //     "js": "always",
+    //     "jsx": "always",
+    //     "ts": "always",
+    //     "tsx": "always"
+    //   }
+    // ]
   }
 }
