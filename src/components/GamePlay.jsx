@@ -14,7 +14,7 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
-// import Tilt from 'react-parallax-tilt';
+import ReactFlipCard from 'reactjs-flip-card';
 
 function GamePlay({
   onClose,
@@ -65,17 +65,22 @@ function GamePlay({
   }, [gameLost, gameWon, isCardFlipped]);
 
   function handleGameRestart() {
-    setViewed([]);
-    setNotViewed(emojisCode);
-    setPlayCards(pickRandom(emojisCode, { count: 4 }));
-    setGameWon(false);
-    setGameLost(false);
-    setGameEndModalOpen(false);
-    setTime(0);
-    setLastScoreTime(0);
-    setScore(0);
-    setScoreIncrease(0);
-    setIsScoreIncrease(false);
+    setIsCardFlipped(true);
+
+    setTimeout(() => {
+      setViewed([]);
+      setNotViewed(emojisCode);
+      setPlayCards(pickRandom(emojisCode, { count: 4 }));
+      setIsScoreIncrease(false);
+      setGameWon(false);
+      setGameLost(false);
+      setGameEndModalOpen(false);
+      setIsCardFlipped(false);
+      setTime(0);
+      setLastScoreTime(0);
+      setScore(0);
+      setScoreIncrease(0);
+    }, 1300);
   }
 
   function handleCardClick(code) {
@@ -128,7 +133,7 @@ function GamePlay({
 
     setTimeout(() => {
       setIsCardFlipped(false);
-    }, 1300);
+    }, 1000);
   }
 
   function handleCardKeyDown(e, code) {
@@ -233,7 +238,7 @@ function GamePlay({
               const { image, name, code } = data;
               return (
                 <div
-                  className={`card d-flex__col align-items__center justify-content__center cursor__pointer padding_1r ${isCardFlipped ? 'flipped' : ''}`}
+                  className="card d-flex__col align-items__center justify-content__center cursor__pointer padding_1r"
                   key={code}
                   onClick={() => {
                     handleCardClick(code);
@@ -244,14 +249,21 @@ function GamePlay({
                     handleCardKeyDown(e, code);
                   }}
                 >
-                  <div className="wrapper">
-                    <div className="card-front d-flex__col align-items__center justify-content__center">
-                      <div className="card-image">
-                        <img src={image} alt={name} />
-                      </div>
-                    </div>
-                    <div className="card-back" />
-                  </div>
+                  <ReactFlipCard
+                    frontComponent={
+                      isCardFlipped ? (
+                        <div />
+                      ) : (
+                        <img className="card-image" src={image} alt={name} />
+                      )
+                    }
+                    frontCss="card-front d-flex__col align-items__center justify-content__center"
+                    backComponent={<div />}
+                    backCss="card-back"
+                    flipTrigger="disabled"
+                    flipByProp={isCardFlipped}
+                    containerCss="wrapper"
+                  />
                 </div>
               );
             })}
