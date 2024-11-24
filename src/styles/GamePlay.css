@@ -1,6 +1,8 @@
 .game-area {
   max-width: 500px;
   margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .game-area header {

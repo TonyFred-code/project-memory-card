@@ -187,7 +187,7 @@ function GamePlay({
           <span className="icon-text">Home</span>
         </button>
       </header>
-      <div className="game-area padding_2r d-flex__col gap_2r">
+      <div className="game-area padding_2r gap_2r">
         <header className="d-flex__col">
           <div className="d-flex__row align-items__center justify-content__space-between padding-left_1r padding-right_1r">
             <div className="score-container d-flex__row align-items__center">
