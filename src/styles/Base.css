@@ -8,7 +8,7 @@
 
 #root > * {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 html {
@@ -25,8 +25,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 ul {
@@ -127,6 +126,10 @@ button:focus-visible {
   justify-content: flex-end;
 }
 
+.gap_d3r {
+  gap: 0.3rem;
+}
+
 .gap_1r {
   gap: 1rem;
 }
@@ -175,6 +178,10 @@ button:focus-visible {
   text-transform: uppercase;
 }
 
+.text-transform__lowercase {
+  text-transform: lowercase;
+}
+
 .font-weight__bold {
   font-weight: bold;
 }
@@ -202,11 +209,14 @@ button:focus-visible {
 
   .btn-icon {
     padding: 0.6rem 1.2rem;
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
   }
 
-  .btn-icon .icon-container {
+  /* .btn-icon .icon-container {
     display: none;
-  }
+  } */
 
   .btn .icon-text {
     display: inline-block;
@@ -215,6 +225,6 @@ button:focus-visible {
 
 @media (min-width: 900px) {
   html {
-    font-size: 13px;
+    font-size: 12px;
   }
 }

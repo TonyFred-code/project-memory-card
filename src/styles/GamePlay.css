@@ -1,0 +1,96 @@
+.game-area {
+  max-width: 500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.game-area header {
+  gap: 0.4rem;
+}
+
+.score-container,
+.timer-container {
+  gap: 0.5rem;
+}
+
+.bar-container {
+  height: 1.5rem;
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid;
+  background: gainsboro;
+}
+
+.bar-container.end-round {
+  opacity: 0.5;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 100px;
+  background-color: blue;
+}
+
+.yellow-bar {
+  background: orangered;
+}
+
+.red-bar {
+  background: red;
+}
+
+.game-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  justify-items: center;
+  gap: 3rem;
+  padding: 3rem;
+}
+
+.modal header h1 {
+  font-size: 2rem;
+}
+
+.card {
+  aspect-ratio: 1 / 1.546;
+  width: 100px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  perspective: 1000px;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transition: transform 1000ms ease-in-out;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.card-front,
+.card-back {
+  border-radius: 10px;
+}
+
+.card-back {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='25' height='25' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0,0%,100%,1)'/><path d='M25 30a5 5 0 110-10 5 5 0 010 10zm0-25a5 5 0 110-10 5 5 0 010 10zM0 30a5 5 0 110-10 5 5 0 010 10zM0 5A5 5 0 110-5 5 5 0 010 5zm12.5 12.5a5 5 0 110-10 5 5 0 010 10z'  stroke-width='1' stroke='none' fill='hsla(174, 100%, 29%, 1)'/><path d='M0 15a2.5 2.5 0 110-5 2.5 2.5 0 010 5zm25 0a2.5 2.5 0 110-5 2.5 2.5 0 010 5zM12.5 2.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5zm0 25a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'  stroke-width='1' stroke='none' fill='hsla(187, 100%, 42%, 1)'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+  background-position: center center;
+  background-size: cover;
+}
+
+@media (min-width: 768px) {
+  .card {
+    aspect-ratio: 1 / 1.356;
+    width: 130px;
+  }
+}
