@@ -3,6 +3,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-rows: auto 1fr;
+  flex: 1;
 }
 
 .game-area header {
