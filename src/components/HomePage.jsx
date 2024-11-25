@@ -3,10 +3,12 @@ import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
 import GamePlay from './GamePlay';
+import HowToPlay from './HowToPlay';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
+    howToPlayPage: false,
   });
   const [highScore, setHighScore] = useState(0);
   const [bestTime, setBestTime] = useState(+Infinity);
@@ -23,12 +25,12 @@ function HomePage({ emojis }) {
     setBestTime(time);
   }
 
-  function openGamePlayPage() {
+  function handleOpenPage(name) {
     const pagesKey = Object.keys(pageOpen);
     const nextPages = { ...pageOpen };
 
     pagesKey.forEach((page) => {
-      if (page === 'gamePlayPage') {
+      if (page === name) {
         nextPages[page] = true;
       } else {
         nextPages[page] = false;
@@ -38,7 +40,7 @@ function HomePage({ emojis }) {
     setPageOpen(nextPages);
   }
 
-  function closeGamePlayPage() {
+  function handlePageClose() {
     const pagesKey = Object.keys(pageOpen);
     const nextPages = { ...pageOpen };
 
@@ -52,7 +54,7 @@ function HomePage({ emojis }) {
   if (pageOpen.gamePlayPage) {
     return (
       <GamePlay
-        onClose={closeGamePlayPage}
+        onClose={handlePageClose}
         handleUpdateBestTime={handleUpdateBestTime}
         handleUpdateHighScore={handleUpdateHighScore}
         highScore={highScore}
@@ -60,6 +62,10 @@ function HomePage({ emojis }) {
         emojis={emojis}
       />
     );
+  }
+
+  if (pageOpen.howToPlayPage) {
+    return <HowToPlay />;
   }
 
   return (
@@ -76,7 +82,9 @@ function HomePage({ emojis }) {
             <button
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={openGamePlayPage}
+              onClick={() => {
+                handleOpenPage('gamePlayPage');
+              }}
             >
               <Icon path={mdiPlay} size={2} />
               <span className="text-transform__capitalize">play</span>
@@ -86,6 +94,9 @@ function HomePage({ emojis }) {
             <button
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
+              onClick={() => {
+                handleOpenPage('howToPlayPage');
+              }}
             >
               <Icon path={mdiHelp} size={2} />
               <span className="text-transform__capitalize">how to play</span>
