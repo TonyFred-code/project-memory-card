@@ -1,4 +1,4 @@
-import { mdiHelp, mdiPlay, mdiBookAccount } from '@mdi/js';
+import { mdiHelp, mdiPlay, mdiCog } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
@@ -108,8 +108,8 @@ function HomePage({ emojis }) {
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
             >
-              <Icon path={mdiBookAccount} size={2} />
-              <span className="text-transform__capitalize">scores</span>
+              <Icon path={mdiCog} size={2} />
+              <span className="text-transform__capitalize">settings</span>
             </button>
           </li>
         </ul>
