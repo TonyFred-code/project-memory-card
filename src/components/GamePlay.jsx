@@ -95,9 +95,7 @@ function GamePlay({
   }
 
   function handleCardClick(code) {
-    if (gameWon || gameLost) return;
-
-    if (isCardFlipped) return;
+    if (gameWon || gameLost || isCardFlipped) return;
 
     if (viewed.includes(code)) {
       setGameLost(true);
@@ -130,13 +128,13 @@ function GamePlay({
 
     if (bonusScore < 0) bonusScore = 0;
 
-    setPlayCards(updatedPlayCards);
     setNotViewed(updatedUniqueElements);
     setViewed(updatedViewed);
     setLastScoreTime(time);
     setScoreIncrease(cardPoint + bonusScore);
     setIsScoreIncrease(true);
     setIsCardFlipped(true);
+    setPlayCards(updatedPlayCards);
 
     setTimeout(() => {
       setIsCardFlipped(false);
@@ -144,7 +142,7 @@ function GamePlay({
   }
 
   function handleCardKeyDown(e, code) {
-    if (e.keyCode === 13) {
+    if (e.key === 'Enter') {
       handleCardClick(code);
     }
   }

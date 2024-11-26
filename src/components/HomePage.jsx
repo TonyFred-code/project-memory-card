@@ -75,9 +75,6 @@ function HomePage({ emojis }) {
   return (
     <div className="home-page d-flex__col gap_2r align-items__center justify-content__center">
       <div>
-        <div className="icon-container icon-container__large">
-          {/* <img src={BrainUrl} alt='Brain' className='img' /> */}
-        </div>
         <h1 className="text-transform__uppercase">Memory Game</h1>
       </div>
       <div className="home-page-buttons d-flex__col align-items__center justify-content__center padding_2r">
