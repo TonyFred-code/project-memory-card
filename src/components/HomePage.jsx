@@ -10,19 +10,23 @@ function HomePage({ emojis }) {
     gamePlayPage: false,
     howToPlayPage: false,
   });
-  const [highScore, setHighScore] = useState(0);
-  const [bestTime, setBestTime] = useState(+Infinity);
+  const [bestPerformance, setBestPerformance] = useState({
+    points: 0,
+    time: +Infinity,
+    pts: -Infinity, // points per second
+  });
 
-  function handleUpdateHighScore(score) {
-    if (score < highScore) return;
+  function updatePerformance({ points, time }) {
+    const gameTime = time > 0 ? time : 1;
+    const pts = points / gameTime;
 
-    setHighScore(score);
-  }
-
-  function handleUpdateBestTime(time) {
-    if (time > bestTime) return;
-
-    setBestTime(time);
+    if (Number.isFinite(pts) && pts > bestPerformance.pts) {
+      setBestPerformance({
+        points,
+        time,
+        pts,
+      });
+    }
   }
 
   function handleOpenPage(name) {
@@ -55,11 +59,11 @@ function HomePage({ emojis }) {
     return (
       <GamePlay
         onClose={handlePageClose}
-        handleUpdateBestTime={handleUpdateBestTime}
-        handleUpdateHighScore={handleUpdateHighScore}
-        highScore={highScore}
-        bestTime={bestTime}
+        highScore={bestPerformance.points}
+        bestTime={bestPerformance.time}
+        bestPointsPerSecond={bestPerformance.pts}
         emojis={emojis}
+        onGameEnd={updatePerformance}
       />
     );
   }
