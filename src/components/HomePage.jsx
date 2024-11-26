@@ -65,7 +65,7 @@ function HomePage({ emojis }) {
   }
 
   if (pageOpen.howToPlayPage) {
-    return <HowToPlay />;
+    return <HowToPlay onClose={handlePageClose} />;
   }
 
   return (
