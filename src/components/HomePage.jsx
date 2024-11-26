@@ -3,32 +3,38 @@ import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
 import GamePlay from './GamePlay';
+import HowToPlay from './HowToPlay';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
+    howToPlayPage: false,
   });
-  const [highScore, setHighScore] = useState(0);
-  const [bestTime, setBestTime] = useState(+Infinity);
+  const [bestPerformance, setBestPerformance] = useState({
+    points: 0,
+    time: +Infinity,
+    pts: -Infinity, // points per second
+  });
 
-  function handleUpdateHighScore(score) {
-    if (score < highScore) return;
+  function updatePerformance({ points, time }) {
+    const gameTime = time > 0 ? time : 1;
+    const pts = points / gameTime;
 
-    setHighScore(score);
+    if (Number.isFinite(pts) && pts > bestPerformance.pts) {
+      setBestPerformance({
+        points,
+        time,
+        pts,
+      });
+    }
   }
 
-  function handleUpdateBestTime(time) {
-    if (time > bestTime) return;
-
-    setBestTime(time);
-  }
-
-  function openGamePlayPage() {
+  function handleOpenPage(name) {
     const pagesKey = Object.keys(pageOpen);
     const nextPages = { ...pageOpen };
 
     pagesKey.forEach((page) => {
-      if (page === 'gamePlayPage') {
+      if (page === name) {
         nextPages[page] = true;
       } else {
         nextPages[page] = false;
@@ -38,7 +44,7 @@ function HomePage({ emojis }) {
     setPageOpen(nextPages);
   }
 
-  function closeGamePlayPage() {
+  function handlePageClose() {
     const pagesKey = Object.keys(pageOpen);
     const nextPages = { ...pageOpen };
 
@@ -52,22 +58,23 @@ function HomePage({ emojis }) {
   if (pageOpen.gamePlayPage) {
     return (
       <GamePlay
-        onClose={closeGamePlayPage}
-        handleUpdateBestTime={handleUpdateBestTime}
-        handleUpdateHighScore={handleUpdateHighScore}
-        highScore={highScore}
-        bestTime={bestTime}
+        onClose={handlePageClose}
+        highScore={bestPerformance.points}
+        bestTime={bestPerformance.time}
+        bestPointsPerSecond={bestPerformance.pts}
         emojis={emojis}
+        onGameEnd={updatePerformance}
       />
     );
+  }
+
+  if (pageOpen.howToPlayPage) {
+    return <HowToPlay onClose={handlePageClose} />;
   }
 
   return (
     <div className="home-page d-flex__col gap_2r align-items__center justify-content__center">
       <div>
-        <div className="icon-container icon-container__large">
-          {/* <img src={BrainUrl} alt='Brain' className='img' /> */}
-        </div>
         <h1 className="text-transform__uppercase">Memory Game</h1>
       </div>
       <div className="home-page-buttons d-flex__col align-items__center justify-content__center padding_2r">
@@ -76,7 +83,9 @@ function HomePage({ emojis }) {
             <button
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={openGamePlayPage}
+              onClick={() => {
+                handleOpenPage('gamePlayPage');
+              }}
             >
               <Icon path={mdiPlay} size={2} />
               <span className="text-transform__capitalize">play</span>
@@ -86,6 +95,9 @@ function HomePage({ emojis }) {
             <button
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
+              onClick={() => {
+                handleOpenPage('howToPlayPage');
+              }}
             >
               <Icon path={mdiHelp} size={2} />
               <span className="text-transform__capitalize">how to play</span>

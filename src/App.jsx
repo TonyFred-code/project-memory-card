@@ -48,8 +48,12 @@ function App() {
 
       const data = await response.json();
 
+      const dataObj = JSON.stringify(data);
+
+      if (dataObj.length === 0) throw new Error(`Fetch Failed. API error`);
+
       // Store data and timestamp in localStorage
-      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      localStorage.setItem(CACHE_KEY, dataObj);
       localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
 
       return data;
@@ -59,7 +63,7 @@ function App() {
       const cachedData = localStorage.getItem(CACHE_KEY);
       const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
 
-      if (cachedData && cachedTime) {
+      if (cachedData && cachedData.length !== 0 && cachedTime) {
         const timeElapsed = Date.now() - parseInt(cachedTime, 10);
         if (timeElapsed < CACHE_EXPIRATION || offline) {
           return JSON.parse(cachedData); // Use cached data if it's still valid

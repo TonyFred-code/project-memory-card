@@ -19,10 +19,10 @@ import ReactFlipCard from 'reactjs-flip-card';
 function GamePlay({
   onClose,
   highScore,
-  handleUpdateHighScore,
-  handleUpdateBestTime,
+  onGameEnd,
   bestTime,
   emojis,
+  bestPointsPerSecond,
 }) {
   const emojisCode = emojis.map((data) => {
     const { code } = data;
@@ -43,6 +43,7 @@ function GamePlay({
   const [scoreIncrease, setScoreIncrease] = useState(0);
   const [isScoreIncrease, setIsScoreIncrease] = useState(false);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
+  const [isHigherPerformance, setIsHigherPerformance] = useState(false);
   let scoreTimeDiff = time - lastScoreTime;
   if (scoreTimeDiff > 15000) scoreTimeDiff = 15000;
   const bonusScorePercent = 100 - Math.floor((scoreTimeDiff * 100) / 15000);
@@ -64,6 +65,16 @@ function GamePlay({
     };
   }, [gameLost, gameWon, isCardFlipped]);
 
+  function handleGameEnd() {
+    const gameTime = time > 0 ? time : 1;
+    const pts = score / gameTime;
+
+    setIsHigherPerformance(pts > bestPointsPerSecond);
+    setGameEndModalOpen(true);
+
+    onGameEnd(score, time);
+  }
+
   function handleGameRestart() {
     setIsCardFlipped(true);
 
@@ -84,15 +95,11 @@ function GamePlay({
   }
 
   function handleCardClick(code) {
-    if (gameWon || gameLost) return;
-
-    if (isCardFlipped) return;
+    if (gameWon || gameLost || isCardFlipped) return;
 
     if (viewed.includes(code)) {
       setGameLost(true);
-      setGameEndModalOpen(true);
-      handleUpdateBestTime(time);
-      handleUpdateHighScore(score);
+      handleGameEnd();
       return;
     } // game lost
 
@@ -100,9 +107,7 @@ function GamePlay({
 
     if (updatedUniqueElements.length === 0) {
       setGameWon(true);
-      setGameEndModalOpen(true);
-      handleUpdateBestTime(time);
-      handleUpdateHighScore(score);
+      handleGameEnd();
       return;
     }
 
@@ -123,13 +128,13 @@ function GamePlay({
 
     if (bonusScore < 0) bonusScore = 0;
 
-    setPlayCards(updatedPlayCards);
     setNotViewed(updatedUniqueElements);
     setViewed(updatedViewed);
     setLastScoreTime(time);
     setScoreIncrease(cardPoint + bonusScore);
     setIsScoreIncrease(true);
     setIsCardFlipped(true);
+    setPlayCards(updatedPlayCards);
 
     setTimeout(() => {
       setIsCardFlipped(false);
@@ -137,7 +142,7 @@ function GamePlay({
   }
 
   function handleCardKeyDown(e, code) {
-    if (e.keyCode === 13) {
+    if (e.key === 'Enter') {
       handleCardClick(code);
     }
   }
@@ -305,11 +310,6 @@ function GamePlay({
                       end={score}
                     />
                   </div>
-                  {score > highScore && (
-                    <span className="font-weight__bold text-transform__lowercase">
-                      New Record !!!
-                    </span>
-                  )}
                 </div>
               </div>
               <div className="d-flex__row align-items__center gap_d3r">
@@ -326,13 +326,13 @@ function GamePlay({
                       isCounting={gameEndModalOpen}
                     />
                   </span>
-                  {time < bestTime && (
-                    <span className="font-weight__bold text-transform__lowercase">
-                      New Record !!!
-                    </span>
-                  )}
                 </div>
               </div>
+              {isHigherPerformance && (
+                <p>
+                  <em>New Record !!!</em>
+                </p>
+              )}
             </div>
           </div>
           <div className="btn-group d-flex__row gap_2r align-items__center">
