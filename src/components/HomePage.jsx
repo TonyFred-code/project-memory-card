@@ -4,12 +4,15 @@ import '../styles/HomePage.css';
 import { useState } from 'react';
 import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
+import SettingsPage from './SettingsPage';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
     howToPlayPage: false,
+    settingsPage: false,
   });
+
   const [bestPerformance, setBestPerformance] = useState({
     points: 0,
     time: +Infinity,
@@ -72,6 +75,10 @@ function HomePage({ emojis }) {
     return <HowToPlay onClose={handlePageClose} />;
   }
 
+  if (pageOpen.settingsPage) {
+    return <SettingsPage onClose={handlePageClose} />;
+  }
+
   return (
     <div className="home-page d-flex__col gap_2r align-items__center justify-content__center">
       <div>
@@ -107,6 +114,9 @@ function HomePage({ emojis }) {
             <button
               type="button"
               className="btn home-page-btn d-flex__row gap_1r align-items__center"
+              onClick={() => {
+                handleOpenPage('settingsPage');
+              }}
             >
               <Icon path={mdiCog} size={2} />
               <span className="text-transform__capitalize">settings</span>
