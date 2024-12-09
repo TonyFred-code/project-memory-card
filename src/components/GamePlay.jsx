@@ -15,6 +15,7 @@ import { Modal } from 'react-responsive-modal';
 import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
 import ReactFlipCard from 'reactjs-flip-card';
+import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
 
 function GamePlay({
   onClose,
@@ -23,7 +24,20 @@ function GamePlay({
   bestTime,
   emojis,
   bestPointsPerSecond,
+  difficulty,
 }) {
+  let playRule = DIFFICULTY_SCORING[difficulty];
+  if (!playRule) {
+    playRule = DIFFICULTY_SCORING.easy;
+  }
+  const {
+    winCardCount,
+    baseCardPoint,
+    maxBonusCardPoint,
+    cardsPerRound,
+    bonusTimeCount,
+  } = playRule;
+
   const emojisCode = emojis.map((data) => {
     const { code } = data;
 
@@ -32,7 +46,7 @@ function GamePlay({
   const [viewed, setViewed] = useState([]);
   const [notViewed, setNotViewed] = useState(emojisCode);
   const [playCards, setPlayCards] = useState(
-    pickRandom(emojisCode, { count: 4 })
+    pickRandom(emojisCode, { count: cardsPerRound })
   );
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
@@ -45,11 +59,12 @@ function GamePlay({
   const [isCardFlipped, setIsCardFlipped] = useState(false);
   const [isHigherPerformance, setIsHigherPerformance] = useState(false);
   let scoreTimeDiff = time - lastScoreTime;
-  if (scoreTimeDiff > 15000) scoreTimeDiff = 15000;
-  const bonusScorePercent = 100 - Math.floor((scoreTimeDiff * 100) / 15000);
+  if (scoreTimeDiff > bonusTimeCount) scoreTimeDiff = bonusTimeCount;
+  const bonusScorePercent =
+    100 - Math.floor((scoreTimeDiff * 100) / bonusTimeCount);
 
-  const cardPoint = 200;
-  const maxBonusScore = 1500;
+  const cardPoint = baseCardPoint;
+  const maxBonusScore = maxBonusCardPoint;
 
   useEffect(() => {
     if (gameWon || gameLost || isCardFlipped) {
@@ -81,7 +96,7 @@ function GamePlay({
     setTimeout(() => {
       setViewed([]);
       setNotViewed(emojisCode);
-      setPlayCards(pickRandom(emojisCode, { count: 4 }));
+      setPlayCards(pickRandom(emojisCode, { count: cardsPerRound }));
       setIsScoreIncrease(false);
       setGameWon(false);
       setGameLost(false);
@@ -105,7 +120,10 @@ function GamePlay({
 
     const updatedUniqueElements = notViewed.filter((d) => d !== code);
 
-    if (updatedUniqueElements.length === 0) {
+    if (
+      winCardCount === updatedUniqueElements.length ||
+      updatedUniqueElements.length === 0
+    ) {
       setGameWon(true);
       handleGameEnd();
       return;
@@ -117,11 +135,11 @@ function GamePlay({
     const temp = updatedUniqueElements.filter((d) => d !== uniqueElement);
 
     const temp2 = pickRandom([...temp, ...updatedViewed], {
-      count: 3,
+      count: cardsPerRound - 1,
     });
 
     const updatedPlayCards = pickRandom([uniqueElement, ...temp2], {
-      count: 4,
+      count: cardsPerRound,
     });
 
     let bonusScore = Math.floor((bonusScorePercent / 100) * maxBonusScore);
@@ -152,7 +170,7 @@ function GamePlay({
   }
 
   return (
-    <div>
+    <div className="d-flex__col">
       <header className="d-flex__row align-items__center justify-content__space-between padding_1r">
         <button
           type="button"
@@ -273,6 +291,9 @@ function GamePlay({
               );
             })}
         </div>
+      </div>
+      <div>
+        {viewed.length} / {winCardCount}
       </div>
       {/* todo: style Modal */}
       <Modal
