@@ -1,11 +1,12 @@
 import { mdiHome } from '@mdi/js';
 import Icon from '@mdi/react';
-// import Tabs from 'rc-tabs';
-import '../styles/HowToPlay.css';
 import { useState } from 'react';
+import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
+import '../styles/HowToPlay.css';
 
 function HowToPlay({ onClose }) {
   const [activeTabKey, setActiveTabKey] = useState(1);
+  const difficultyLevels = Object.keys(DIFFICULTY_SCORING);
 
   const tabItems = [
     {
@@ -70,35 +71,30 @@ function HowToPlay({ onClose }) {
             challenge:
           </p>
           <ul className="d-flex__col gap_d3r">
-            <li>
-              <strong>Easy:</strong>
-              <br />
-              - Each round presents 4 cards to choose from.
-              <br />
-              - Complete 5 rounds by selecting unique cards in each to win the
-              game.
-              <br />- Earn 500 base points per unique card.
-              <br /> - Bonus points can reach up to 1,500 per unique card,
-              depending on speed.
-            </li>
-            <li>
-              <strong>Medium:</strong>
-              <br /> - Each round presents 9 cards to choose from.
-              <br /> - Complete 10 rounds by selecting unique cards in each to
-              win the game.
-              <br /> - Earn 750 base points per unique card.
-              <br /> - Bonus points can reach up to 2,000 per unique card,
-              depending on speed.
-            </li>
-            <li>
-              <strong>Hard:</strong>
-              <br />- Each round presents 16 cards to choose from.
-              <br />- Complete 15 rounds by selecting unique cards in each to
-              win the game.
-              <br /> - Earn 1,000 base points per unique card.
-              <br />- Bonus points can reach up to 2,500 per unique card,
-              depending on speed.
-            </li>
+            {difficultyLevels.map((difficulty) => {
+              const {
+                winCardCount,
+                baseCardPoint,
+                maxBonusCardPoint,
+                cardsPerRound,
+              } = DIFFICULTY_SCORING[difficulty];
+              return (
+                <li key={difficulty}>
+                  <strong className="text-transform__capitalize">
+                    {difficulty}:
+                  </strong>
+                  <br />- Each round presents <em>{cardsPerRound}</em> cards to
+                  choose from.
+                  <br />- Complete <em>{winCardCount}</em> rounds by selecting
+                  unique cards in each to win the game.
+                  <br />- Earn <em>{baseCardPoint}</em> base points per unique
+                  card.
+                  <br /> - Bonus points can reach up to{' '}
+                  <em>{maxBonusCardPoint}</em> per unique card, depending on
+                  speed.
+                </li>
+              );
+            })}
           </ul>
           <p>
             Be careful not to repeat any card during the game—doing so ends the
