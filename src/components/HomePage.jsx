@@ -19,6 +19,35 @@ function HomePage({ emojis }) {
     pts: -Infinity, // points per second
   });
 
+  const [difficulty, setDifficulty] = useState({
+    easy: true,
+    medium: false,
+    hard: false,
+  });
+  const [sound, setSound] = useState({
+    bg_music: true,
+    sfx: true,
+  });
+
+  function updateDifficulty(nextDifficulty) {
+    setDifficulty({ ...nextDifficulty });
+  }
+
+  function updateSound(nextSound) {
+    setSound({ ...nextSound });
+  }
+
+  function activeDifficulty() {
+    const difficultyKeys = Object.keys(difficulty);
+    let diff = '';
+
+    difficultyKeys.forEach((d) => {
+      if (difficulty[d]) diff = d;
+    });
+
+    return diff;
+  }
+
   function updatePerformance({ points, time }) {
     const gameTime = time > 0 ? time : 1;
     const pts = points / gameTime;
@@ -67,6 +96,7 @@ function HomePage({ emojis }) {
         bestPointsPerSecond={bestPerformance.pts}
         emojis={emojis}
         onGameEnd={updatePerformance}
+        difficulty={activeDifficulty()}
       />
     );
   }
@@ -76,7 +106,15 @@ function HomePage({ emojis }) {
   }
 
   if (pageOpen.settingsPage) {
-    return <SettingsPage onClose={handlePageClose} />;
+    return (
+      <SettingsPage
+        onClose={handlePageClose}
+        difficulty={difficulty}
+        updateDifficulty={updateDifficulty}
+        sounds={sound}
+        updateSound={updateSound}
+      />
+    );
   }
 
   return (
