@@ -65,6 +65,7 @@ function GamePlay({
 
   const cardPoint = baseCardPoint;
   const maxBonusScore = maxBonusCardPoint;
+  const rowCount = Math.sqrt(cardsPerRound);
 
   useEffect(() => {
     if (gameWon || gameLost || isCardFlipped) {
@@ -120,15 +121,6 @@ function GamePlay({
 
     const updatedUniqueElements = notViewed.filter((d) => d !== code);
 
-    if (
-      winCardCount === updatedUniqueElements.length ||
-      updatedUniqueElements.length === 0
-    ) {
-      setGameWon(true);
-      handleGameEnd();
-      return;
-    }
-
     const [uniqueElement] = pickRandom(updatedUniqueElements);
     const updatedViewed = [code, ...viewed];
 
@@ -153,6 +145,12 @@ function GamePlay({
     setIsScoreIncrease(true);
     setIsCardFlipped(true);
     setPlayCards(updatedPlayCards);
+
+    if (updatedViewed.length === winCardCount) {
+      setGameWon(true);
+      handleGameEnd();
+      return;
+    }
 
     setTimeout(() => {
       setIsCardFlipped(false);
@@ -210,7 +208,7 @@ function GamePlay({
           <span className="icon-text">Home</span>
         </button>
       </header>
-      <div className="game-area padding_2r gap_2r">
+      <div className="game-area padding_1r gap_2r">
         <header className="d-flex__col">
           <div className="d-flex__row align-items__center justify-content__space-between padding-left_1r padding-right_1r">
             <div className="score-container d-flex__row align-items__center">
@@ -254,14 +252,19 @@ function GamePlay({
             </div>
           </div>
         </header>
-        <div className="game-cards justify-content__center align-items__center">
+        <div
+          className="game-cards justify-content__center align-items__center"
+          style={{
+            '--quantity': rowCount,
+          }}
+        >
           {emojis
             .filter((data) => playCards.includes(data.code))
             .map((data) => {
               const { image, name, code } = data;
               return (
                 <div
-                  className="card d-flex__col align-items__center justify-content__center cursor__pointer padding_1r"
+                  className="card d-flex__col align-items__center justify-content__center cursor__pointer padding_d5r"
                   key={code}
                   onClick={() => {
                     handleCardClick(code);
@@ -292,9 +295,9 @@ function GamePlay({
             })}
         </div>
       </div>
-      <div>
+      <p className="d-flex__col align-items__center card-count">
         {viewed.length} / {winCardCount}
-      </div>
+      </p>
       {/* todo: style Modal */}
       <Modal
         open={gameEndModalOpen}
