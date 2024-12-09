@@ -136,6 +136,10 @@ button:disabled {
   gap: 0.3rem;
 }
 
+.gap_d5r {
+  gap: 0.5rem;
+}
+
 .gap_1r {
   gap: 1rem;
 }
