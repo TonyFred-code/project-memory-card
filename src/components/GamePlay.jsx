@@ -81,14 +81,15 @@ function GamePlay({
     };
   }, [gameLost, gameWon, isCardFlipped]);
 
-  function handleGameEnd() {
-    const gameTime = time > 0 ? time : 1;
-    const pts = score / gameTime;
+  function handleGameEnd(points) {
+    const floored = Math.floor(time / 1000);
+    const gameTime = floored > 0 ? floored : 1;
+    const pts = points / gameTime;
 
     setIsHigherPerformance(pts > bestPointsPerSecond);
     setGameEndModalOpen(true);
 
-    onGameEnd(score, time);
+    onGameEnd(points, time);
   }
 
   function handleGameRestart() {
@@ -115,7 +116,7 @@ function GamePlay({
 
     if (viewed.includes(code)) {
       setGameLost(true);
-      handleGameEnd();
+      handleGameEnd(score);
       return;
     } // game lost
 
@@ -148,7 +149,7 @@ function GamePlay({
 
     if (updatedViewed.length === winCardCount) {
       setGameWon(true);
-      handleGameEnd();
+      handleGameEnd(score + cardPoint + bonusScore);
       return;
     }
 
@@ -359,7 +360,7 @@ function GamePlay({
               )}
             </div>
           </div>
-          <div className="btn-group d-flex__row gap_2r align-items__center">
+          <div className="btn-group d-flex__row gap_2r align-items__center justify-content__space-around">
             <button
               type="button"
               onClick={() => {

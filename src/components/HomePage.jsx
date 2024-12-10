@@ -48,8 +48,9 @@ function HomePage({ emojis }) {
     return diff;
   }
 
-  function updatePerformance({ points, time }) {
-    const gameTime = time > 0 ? time : 1;
+  function updatePerformance(points, time) {
+    const floored = Math.floor(time / 1000);
+    const gameTime = floored > 0 ? floored : 1;
     const pts = points / gameTime;
 
     if (Number.isFinite(pts) && pts > bestPerformance.pts) {
