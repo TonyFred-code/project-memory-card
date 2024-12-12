@@ -5,6 +5,7 @@ import { useState } from 'react';
 import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
 import SettingsPage from './SettingsPage';
+import GameButton from './GameButton';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
@@ -24,17 +25,14 @@ function HomePage({ emojis }) {
     medium: false,
     hard: false,
   });
-  const [sound, setSound] = useState({
-    bg_music: true,
-    sfx: true,
-  });
+  const [sfx, setSfx] = useState(true);
 
   function updateDifficulty(nextDifficulty) {
     setDifficulty({ ...nextDifficulty });
   }
 
   function updateSound(nextSound) {
-    setSound({ ...nextSound });
+    setSfx(nextSound);
   }
 
   function activeDifficulty() {
@@ -73,7 +71,6 @@ function HomePage({ emojis }) {
         nextPages[page] = false;
       }
     });
-
     setPageOpen(nextPages);
   }
 
@@ -98,12 +95,13 @@ function HomePage({ emojis }) {
         emojis={emojis}
         onGameEnd={updatePerformance}
         difficulty={activeDifficulty()}
+        sound={sfx}
       />
     );
   }
 
   if (pageOpen.howToPlayPage) {
-    return <HowToPlay onClose={handlePageClose} />;
+    return <HowToPlay onClose={handlePageClose} sfx={sfx} />;
   }
 
   if (pageOpen.settingsPage) {
@@ -112,7 +110,7 @@ function HomePage({ emojis }) {
         onClose={handlePageClose}
         difficulty={difficulty}
         updateDifficulty={updateDifficulty}
-        sounds={sound}
+        sound={sfx}
         updateSound={updateSound}
       />
     );
@@ -126,40 +124,51 @@ function HomePage({ emojis }) {
       <div className="home-page-buttons d-flex__col align-items__center justify-content__center padding_2r">
         <ul className="d-flex__col gap_1r ">
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={() => {
+            <GameButton
+              func={() => {
                 handleOpenPage('gamePlayPage');
               }}
-            >
-              <Icon path={mdiPlay} size={2} />
-              <span className="text-transform__capitalize">play</span>
-            </button>
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiPlay} size={2} />
+                  <span className="text-transform__capitalize">play</span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={() => {
+            <GameButton
+              func={() => {
                 handleOpenPage('howToPlayPage');
               }}
-            >
-              <Icon path={mdiHelp} size={2} />
-              <span className="text-transform__capitalize">how to play</span>
-            </button>
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiHelp} size={2} />
+                  <span className="text-transform__capitalize">
+                    how to play
+                  </span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={() => {
+            <GameButton
+              func={() => {
                 handleOpenPage('settingsPage');
               }}
-            >
-              <Icon path={mdiCog} size={2} />
-              <span className="text-transform__capitalize">settings</span>
-            </button>
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiCog} size={2} />
+                  <span className="text-transform__capitalize">settings</span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
         </ul>
       </div>

@@ -3,19 +3,27 @@ import { mdiContentSave, mdiHome } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/SettingsPage.css';
 import { useState } from 'react';
+import useSound from 'use-sound';
+import switchSfx from '../assets/pop-sound-effect.mp3';
+import GameButton from './GameButton';
 
 function SettingsPage({
-  sounds,
+  sound,
   updateSound,
   difficulty,
   updateDifficulty,
   onClose,
 }) {
   const [activeDifficulty, setActiveDifficulty] = useState({ ...difficulty });
-  const [activeSound, setActiveSound] = useState({ ...sounds });
+  const [activeSound, setActiveSound] = useState(sound);
   const [updated, setUpdated] = useState(true);
 
+  const [playSwitchSfx] = useSound(switchSfx);
+
   function updateActiveDifficulty(event) {
+    if (activeSound) {
+      playSwitchSfx();
+    }
     const difficultyKeys = Object.keys(activeDifficulty);
     const nextDifficulty = { ...activeDifficulty };
 
@@ -31,16 +39,11 @@ function SettingsPage({
   }
 
   function updateActiveSound(event) {
-    const soundKeys = Object.keys(activeSound);
-    const nextSound = { ...activeSound };
-
-    soundKeys.forEach((key) => {
-      if (event.target.name === key) {
-        nextSound[key] = event.target.checked;
-      }
-    });
-
-    setActiveSound(nextSound);
+    if (activeSound) {
+      playSwitchSfx();
+    }
+    setActiveSound(event.target.checked);
+    updateSound(event.target.checked);
   }
 
   function handlePageClose() {
@@ -56,34 +59,40 @@ function SettingsPage({
   return (
     <div className="d-flex__col">
       <header className="d-flex__row align-items__center padding_1r">
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={handlePageClose}
-        >
-          <span className="icon-container">
-            <Icon path={mdiHome} size={2} />
-          </span>
+        <GameButton
+          sfx={activeSound}
+          func={handlePageClose}
+          classNames="btn btn-icon"
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiHome} size={2} />
+              </span>
 
-          <span className="icon-text">Home</span>
-        </button>
+              <span className="icon-text">Home</span>
+            </>
+          }
+        />
 
         <h1 className="margin_lr_centering text-transform__uppercase">
           settings
         </h1>
 
-        <button
-          type="button"
+        <GameButton
+          sfx={activeSound}
+          func={handleUpdateSettings}
+          classNames="btn btn-icon"
           disabled={updated}
-          className="btn btn-icon"
-          onClick={handleUpdateSettings}
-        >
-          <span className="icon-container">
-            <Icon path={mdiContentSave} size={2} />
-          </span>
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiContentSave} size={2} />
+              </span>
 
-          <span className="icon-text">Save{updated && 'd'}</span>
-        </button>
+              <span className="icon-text">Save{updated && 'd'}</span>
+            </>
+          }
+        />
       </header>
 
       <div
@@ -100,24 +109,6 @@ function SettingsPage({
               className="padding-left_1r margin_lr_centering d-flex__col gap_1r"
             >
               <div className="d-flex__row gap_2r justify-content__space-between">
-                <span className="text-transform__lowercase">
-                  Background Music
-                </span>
-                <span className="switch cursor__pointer">
-                  <input
-                    type="checkbox"
-                    name="bg_music"
-                    id='bg_music"'
-                    className="cursor__pointer"
-                    onChange={(e) => {
-                      updateActiveSound(e);
-                    }}
-                    checked={activeSound.bg_music}
-                  />
-                  <label htmlFor="bg_music" />
-                </span>
-              </div>
-              <div className="d-flex__row gap_2r justify-content__space-between">
                 <span className="text-transform__lowercase">Sound Effects</span>
                 <span className="switch cursor__pointer">
                   <input
@@ -128,7 +119,7 @@ function SettingsPage({
                     onChange={(e) => {
                       updateActiveSound(e);
                     }}
-                    checked={activeSound.sfx}
+                    checked={activeSound}
                   />
                   <label htmlFor="sfx" />
                 </span>

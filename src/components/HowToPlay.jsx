@@ -1,12 +1,17 @@
 import { mdiHome } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useState } from 'react';
+import useSound from 'use-sound';
 import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
 import '../styles/HowToPlay.css';
+import GameButton from './GameButton';
+import pageFlipSfx from '../assets/pageturn.mp3';
 
-function HowToPlay({ onClose }) {
+function HowToPlay({ onClose, sfx }) {
   const [activeTabKey, setActiveTabKey] = useState(1);
   const difficultyLevels = Object.keys(DIFFICULTY_SCORING);
+
+  const [playPageFlip] = useSound(pageFlipSfx);
 
   const tabItems = [
     {
@@ -106,6 +111,13 @@ function HowToPlay({ onClose }) {
     },
   ];
 
+  function handleTabChange(key) {
+    if (sfx && key !== activeTabKey) {
+      playPageFlip();
+    }
+    setActiveTabKey(key);
+  }
+
   function handlePageClose() {
     onClose();
   }
@@ -115,17 +127,20 @@ function HowToPlay({ onClose }) {
       <header className="d-flex__row align-items__center padding_1r">
         <h1 className="margin_lr_centering">How to Play</h1>
 
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={handlePageClose}
-        >
-          <span className="icon-container">
-            <Icon path={mdiHome} size={2} />
-          </span>
+        <GameButton
+          classNames="btn btn-icon"
+          func={handlePageClose}
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiHome} size={2} />
+              </span>
 
-          <span className="icon-text">Home</span>
-        </button>
+              <span className="icon-text">Home</span>
+            </>
+          }
+          sfx={sfx}
+        />
       </header>
 
       <div
@@ -141,10 +156,10 @@ function HowToPlay({ onClose }) {
                   key={key}
                   className={`tab cursor__pointer d-flex__row padding-right_1r padding-left_1r align-items__center ${activeTabKey === key ? 'active-tab' : ''}`}
                   onClick={() => {
-                    setActiveTabKey(key);
+                    handleTabChange(key);
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') setActiveTabKey(key);
+                    if (e.key === 'Enter') handleTabChange(key);
                   }}
                   role="button"
                   tabIndex={0}

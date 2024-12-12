@@ -14,8 +14,14 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
+import useSound from 'use-sound';
 import ReactFlipCard from 'reactjs-flip-card';
 import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
+import cardFlipSfx from '../assets/flipcard.mp3';
+import gameWinSfx from '../assets/level-win.mp3';
+import uniqueElementPick from '../assets/success_bell.mp3';
+import levelLossSfx from '../assets/game-over-arcade.mp3';
+import GameButton from './GameButton';
 
 function GamePlay({
   onClose,
@@ -25,6 +31,7 @@ function GamePlay({
   emojis,
   bestPointsPerSecond,
   difficulty,
+  sound,
 }) {
   let playRule = DIFFICULTY_SCORING[difficulty];
   if (!playRule) {
@@ -43,6 +50,11 @@ function GamePlay({
 
     return code;
   });
+  const [playCardFlip] = useSound(cardFlipSfx);
+  const [playLevelWin] = useSound(gameWinSfx);
+  const [playUniqueCardPick] = useSound(uniqueElementPick);
+  const [playLevelLoss] = useSound(levelLossSfx);
+
   const [viewed, setViewed] = useState([]);
   const [notViewed, setNotViewed] = useState(emojisCode);
   const [playCards, setPlayCards] = useState(
@@ -117,8 +129,15 @@ function GamePlay({
     if (viewed.includes(code)) {
       setGameLost(true);
       handleGameEnd(score);
+      if (sound) {
+        playLevelLoss();
+      }
       return;
     } // game lost
+
+    if (sound) {
+      playUniqueCardPick();
+    }
 
     const updatedUniqueElements = notViewed.filter((d) => d !== code);
 
@@ -138,23 +157,32 @@ function GamePlay({
     let bonusScore = Math.floor((bonusScorePercent / 100) * maxBonusScore);
 
     if (bonusScore < 0) bonusScore = 0;
-
-    setNotViewed(updatedUniqueElements);
-    setViewed(updatedViewed);
     setLastScoreTime(time);
     setScoreIncrease(cardPoint + bonusScore);
     setIsScoreIncrease(true);
-    setIsCardFlipped(true);
-    setPlayCards(updatedPlayCards);
+    setViewed(updatedViewed);
 
     if (updatedViewed.length === winCardCount) {
       setGameWon(true);
       handleGameEnd(score + cardPoint + bonusScore);
+      if (sound) {
+        playLevelWin();
+      }
       return;
+    }
+
+    setNotViewed(updatedUniqueElements);
+    setIsCardFlipped(true);
+    setPlayCards(updatedPlayCards);
+    if (sound) {
+      playCardFlip();
     }
 
     setTimeout(() => {
       setIsCardFlipped(false);
+      if (sound) {
+        playCardFlip();
+      }
     }, 1000);
   }
 
@@ -171,16 +199,19 @@ function GamePlay({
   return (
     <div className="d-flex__col">
       <header className="d-flex__row align-items__center justify-content__space-between padding_1r">
-        <button
-          type="button"
-          className="btn btn-icon d-flex__row gap_1r align-items__center"
-          onClick={handleGameRestart}
-        >
-          <span className="icon-container">
-            <Icon path={mdiReload} size={2} />
-          </span>
-          <span className="icon-text">Restart</span>
-        </button>
+        <GameButton
+          classNames="btn btn-icon d-flex__row gap_1r align-items__center"
+          sfx={sound}
+          func={handleGameRestart}
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiReload} size={2} />
+              </span>
+              <span className="icon-text">Restart</span>
+            </>
+          }
+        />
         <div>
           <div className="d-flex__row gap_1r align-items__center">
             <span className="icon-container">
@@ -197,17 +228,19 @@ function GamePlay({
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={handlePageClose}
-        >
-          <span className="icon-container">
-            <Icon path={mdiHome} size={2} />
-          </span>
-
-          <span className="icon-text">Home</span>
-        </button>
+        <GameButton
+          sfx={sound}
+          classNames="btn btn-icon"
+          func={handlePageClose}
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiHome} size={2} />
+              </span>
+              <span className="icon-text">Home</span>{' '}
+            </>
+          }
+        />
       </header>
       <div className="game-area padding_1r gap_2r">
         <header className="d-flex__col">
@@ -361,23 +394,21 @@ function GamePlay({
             </div>
           </div>
           <div className="btn-group d-flex__row gap_2r align-items__center justify-content__space-around">
-            <button
-              type="button"
-              onClick={() => {
-                handleGameRestart();
-              }}
-            >
-              Restart
-            </button>
-            <button
-              type="button"
-              onClick={() => {
+            <GameButton
+              func={handleGameRestart}
+              classNames=""
+              content={<span>Restart</span>}
+              sfx={sound}
+            />
+            <GameButton
+              func={() => {
                 setGameEndModalOpen(false);
                 handlePageClose();
               }}
-            >
-              Main Menu
-            </button>
+              classNames=""
+              content={<span> Main Menu</span>}
+              sfx={sound}
+            />
           </div>
         </div>
       </Modal>
