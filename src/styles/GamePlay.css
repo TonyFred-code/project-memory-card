@@ -105,14 +105,11 @@
   .game-cards {
     --width: 350px;
   }
-}
 
-@media (min-width: 1024px) {
-  .game-cards {
-    --width: 450px;
-  }
-
-  .card {
-    aspect-ratio: 1 / 1.355;
+  .card-image {
+    width: 100%;
+    height: 100%;
+    max-width: 70px;
+    max-height: 70px;
   }
 }
