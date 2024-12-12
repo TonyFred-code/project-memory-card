@@ -1,11 +1,17 @@
 import { mdiHome } from '@mdi/js';
 import Icon from '@mdi/react';
-// import Tabs from 'rc-tabs';
-import '../styles/HowToPlay.css';
 import { useState } from 'react';
+import useSound from 'use-sound';
+import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
+import '../styles/HowToPlay.css';
+import GameButton from './GameButton';
+import pageFlipSfx from '../assets/pageturn.mp3';
 
-function HowToPlay({ onClose }) {
+function HowToPlay({ onClose, sfx }) {
   const [activeTabKey, setActiveTabKey] = useState(1);
+  const difficultyLevels = Object.keys(DIFFICULTY_SCORING);
+
+  const [playPageFlip] = useSound(pageFlipSfx);
 
   const tabItems = [
     {
@@ -70,35 +76,30 @@ function HowToPlay({ onClose }) {
             challenge:
           </p>
           <ul className="d-flex__col gap_d3r">
-            <li>
-              <strong>Easy:</strong>
-              <br />
-              - Each round presents 4 cards to choose from.
-              <br />
-              - Complete 5 rounds by selecting unique cards in each to win the
-              game.
-              <br />- Earn 500 base points per unique card.
-              <br /> - Bonus points can reach up to 1,500 per unique card,
-              depending on speed.
-            </li>
-            <li>
-              <strong>Medium:</strong>
-              <br /> - Each round presents 9 cards to choose from.
-              <br /> - Complete 10 rounds by selecting unique cards in each to
-              win the game.
-              <br /> - Earn 750 base points per unique card.
-              <br /> - Bonus points can reach up to 2,000 per unique card,
-              depending on speed.
-            </li>
-            <li>
-              <strong>Hard:</strong>
-              <br />- Each round presents 16 cards to choose from.
-              <br />- Complete 15 rounds by selecting unique cards in each to
-              win the game.
-              <br /> - Earn 1,000 base points per unique card.
-              <br />- Bonus points can reach up to 2,500 per unique card,
-              depending on speed.
-            </li>
+            {difficultyLevels.map((difficulty) => {
+              const {
+                winCardCount,
+                baseCardPoint,
+                maxBonusCardPoint,
+                cardsPerRound,
+              } = DIFFICULTY_SCORING[difficulty];
+              return (
+                <li key={difficulty}>
+                  <strong className="text-transform__capitalize">
+                    {difficulty}:
+                  </strong>
+                  <br />- Each round presents <em>{cardsPerRound}</em> cards to
+                  choose from.
+                  <br />- Complete <em>{winCardCount}</em> rounds by selecting
+                  unique cards in each to win the game.
+                  <br />- Earn <em>{baseCardPoint}</em> base points per unique
+                  card.
+                  <br /> - Bonus points can reach up to{' '}
+                  <em>{maxBonusCardPoint}</em> per unique card, depending on
+                  speed.
+                </li>
+              );
+            })}
           </ul>
           <p>
             Be careful not to repeat any card during the game—doing so ends the
@@ -110,6 +111,13 @@ function HowToPlay({ onClose }) {
     },
   ];
 
+  function handleTabChange(key) {
+    if (sfx && key !== activeTabKey) {
+      playPageFlip();
+    }
+    setActiveTabKey(key);
+  }
+
   function handlePageClose() {
     onClose();
   }
@@ -119,17 +127,20 @@ function HowToPlay({ onClose }) {
       <header className="d-flex__row align-items__center padding_1r">
         <h1 className="margin_lr_centering">How to Play</h1>
 
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={handlePageClose}
-        >
-          <span className="icon-container">
-            <Icon path={mdiHome} size={2} />
-          </span>
+        <GameButton
+          classNames="btn btn-icon"
+          func={handlePageClose}
+          content={
+            <>
+              <span className="icon-container">
+                <Icon path={mdiHome} size={2} />
+              </span>
 
-          <span className="icon-text">Home</span>
-        </button>
+              <span className="icon-text">Home</span>
+            </>
+          }
+          sfx={sfx}
+        />
       </header>
 
       <div
@@ -145,10 +156,10 @@ function HowToPlay({ onClose }) {
                   key={key}
                   className={`tab cursor__pointer d-flex__row padding-right_1r padding-left_1r align-items__center ${activeTabKey === key ? 'active-tab' : ''}`}
                   onClick={() => {
-                    setActiveTabKey(key);
+                    handleTabChange(key);
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') setActiveTabKey(key);
+                    if (e.key === 'Enter') handleTabChange(key);
                   }}
                   role="button"
                   tabIndex={0}

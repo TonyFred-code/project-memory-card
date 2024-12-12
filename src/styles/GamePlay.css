@@ -42,12 +42,13 @@
 }
 
 .game-cards {
+  --width: 200px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(var(--quantity), 1fr);
+  grid-template-rows: repeat(var(--quantity), 1fr);
   justify-items: center;
-  gap: 3rem;
-  padding: 3rem;
+  gap: 1rem;
+  padding: 1rem;
 }
 
 .modal header h1 {
@@ -55,8 +56,8 @@
 }
 
 .card {
-  aspect-ratio: 1 / 1.546;
-  width: 100px;
+  aspect-ratio: 1 / 1;
+  width: calc(var(--width) / var(--quantity));
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.15);
   perspective: 1000px;
@@ -89,9 +90,26 @@
   background-size: cover;
 }
 
+.card-count {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 1.8rem;
+}
+
+@media (min-width: 375px) {
+  .game-cards {
+    --width: 270px;
+  }
+}
+
 @media (min-width: 768px) {
-  .card {
-    aspect-ratio: 1 / 1.356;
-    width: 130px;
+  .game-cards {
+    --width: 350px;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    max-width: 70px;
+    max-height: 70px;
   }
 }

@@ -1,23 +1,54 @@
-import { mdiHelp, mdiPlay, mdiBookAccount } from '@mdi/js';
+import { mdiHelp, mdiPlay, mdiCog } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
 import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
+import SettingsPage from './SettingsPage';
+import GameButton from './GameButton';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
     howToPlayPage: false,
+    settingsPage: false,
   });
+
   const [bestPerformance, setBestPerformance] = useState({
     points: 0,
     time: +Infinity,
     pts: -Infinity, // points per second
   });
 
-  function updatePerformance({ points, time }) {
-    const gameTime = time > 0 ? time : 1;
+  const [difficulty, setDifficulty] = useState({
+    easy: true,
+    medium: false,
+    hard: false,
+  });
+  const [sfx, setSfx] = useState(true);
+
+  function updateDifficulty(nextDifficulty) {
+    setDifficulty({ ...nextDifficulty });
+  }
+
+  function updateSound(nextSound) {
+    setSfx(nextSound);
+  }
+
+  function activeDifficulty() {
+    const difficultyKeys = Object.keys(difficulty);
+    let diff = '';
+
+    difficultyKeys.forEach((d) => {
+      if (difficulty[d]) diff = d;
+    });
+
+    return diff;
+  }
+
+  function updatePerformance(points, time) {
+    const floored = Math.floor(time / 1000);
+    const gameTime = floored > 0 ? floored : 1;
     const pts = points / gameTime;
 
     if (Number.isFinite(pts) && pts > bestPerformance.pts) {
@@ -40,7 +71,6 @@ function HomePage({ emojis }) {
         nextPages[page] = false;
       }
     });
-
     setPageOpen(nextPages);
   }
 
@@ -64,12 +94,26 @@ function HomePage({ emojis }) {
         bestPointsPerSecond={bestPerformance.pts}
         emojis={emojis}
         onGameEnd={updatePerformance}
+        difficulty={activeDifficulty()}
+        sound={sfx}
       />
     );
   }
 
   if (pageOpen.howToPlayPage) {
-    return <HowToPlay onClose={handlePageClose} />;
+    return <HowToPlay onClose={handlePageClose} sfx={sfx} />;
+  }
+
+  if (pageOpen.settingsPage) {
+    return (
+      <SettingsPage
+        onClose={handlePageClose}
+        difficulty={difficulty}
+        updateDifficulty={updateDifficulty}
+        sound={sfx}
+        updateSound={updateSound}
+      />
+    );
   }
 
   return (
@@ -80,37 +124,51 @@ function HomePage({ emojis }) {
       <div className="home-page-buttons d-flex__col align-items__center justify-content__center padding_2r">
         <ul className="d-flex__col gap_1r ">
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={() => {
+            <GameButton
+              func={() => {
                 handleOpenPage('gamePlayPage');
               }}
-            >
-              <Icon path={mdiPlay} size={2} />
-              <span className="text-transform__capitalize">play</span>
-            </button>
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiPlay} size={2} />
+                  <span className="text-transform__capitalize">play</span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-              onClick={() => {
+            <GameButton
+              func={() => {
                 handleOpenPage('howToPlayPage');
               }}
-            >
-              <Icon path={mdiHelp} size={2} />
-              <span className="text-transform__capitalize">how to play</span>
-            </button>
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiHelp} size={2} />
+                  <span className="text-transform__capitalize">
+                    how to play
+                  </span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
           <li className="d-flex__col align-items__center justify-content__space-around">
-            <button
-              type="button"
-              className="btn home-page-btn d-flex__row gap_1r align-items__center"
-            >
-              <Icon path={mdiBookAccount} size={2} />
-              <span className="text-transform__capitalize">scores</span>
-            </button>
+            <GameButton
+              func={() => {
+                handleOpenPage('settingsPage');
+              }}
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiCog} size={2} />
+                  <span className="text-transform__capitalize">settings</span>
+                </>
+              }
+              sfx={sfx}
+            />
           </li>
         </ul>
       </div>

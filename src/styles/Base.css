@@ -64,6 +64,12 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+button:disabled {
+  outline: none;
+  cursor: not-allowed;
+  border: none;
+}
+
 .icon-container {
   display: flex;
   align-items: center;
@@ -128,6 +134,10 @@ button:focus-visible {
 
 .gap_d3r {
   gap: 0.3rem;
+}
+
+.gap_d5r {
+  gap: 0.5rem;
 }
 
 .gap_1r {

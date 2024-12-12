@@ -25,7 +25,8 @@
     "react-responsive-modal": "^6.4.2",
     "react-spinners": "^0.14.1",
     "reactjs-flip-card": "^2.0.3",
-    "use-count-up": "^3.0.1"
+    "use-count-up": "^3.0.1",
+    "use-sound": "^4.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
