@@ -71,6 +71,10 @@ button:disabled {
   border: none;
 }
 
+table {
+  width: 100%;
+}
+
 .icon-container {
   display: flex;
   align-items: center;
