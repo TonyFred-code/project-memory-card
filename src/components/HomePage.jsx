@@ -143,7 +143,14 @@ function HomePage({ emojis }) {
   }
 
   if (pageOpen.scoreHistoryPage) {
-    return <ScoreHistory onClose={handlePageClose} sfx={sfx} />;
+    return (
+      <ScoreHistory
+        onClose={handlePageClose}
+        sfx={sfx}
+        scoreHistory={scoreHistory}
+        activeDifficulty={activeDifficulty()}
+      />
+    );
   }
 
   return (
