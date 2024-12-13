@@ -17,7 +17,7 @@ function ScoreHistory({ onClose, sfx, scoreHistory, activeDifficulty }) {
     const diffScore = scoreHistory[key];
     return {
       key,
-      label: <h2 className="text-transform__uppercase">{key}</h2>,
+      label: <h2 className="text-transform__capitalize">{key}</h2>,
       children: (
         <table>
           <thead>
