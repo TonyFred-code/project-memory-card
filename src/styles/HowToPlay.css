@@ -1,16 +1,16 @@
-.tab-section-container > div {
+.how-to-play-container .tab-section-container > div {
   border-radius: 17px;
   display: grid;
   grid-template-rows: 50px 1fr;
   border: 2px solid rgba(0, 0, 0, 0.05);
 }
 
-.tabs-container {
+.how-to-play-container .tabs-container {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
 }
 
-.tab {
+.how-to-play-container .tab {
   background: rgba(0, 0, 0, 0.05);
   font-size: 1.3rem;
   width: 100%;
@@ -18,38 +18,39 @@
   border-right: 1.5px solid rgba(0, 0, 0, 0.05);
 }
 
-.active-tab {
+.how-to-play-container .active-tab {
   background-color: rgb(255, 255, 255);
   border-bottom: 1px transparent;
 }
 
-.tab:hover {
+.how-to-play-container .tab:hover {
   font-style: italic;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.tabs-container :first-child {
+.how-to-play-container .tabs-container :first-child {
   border-top-left-radius: 15px;
 }
 
-.tabs-container :last-child {
+.how-to-play-container .tabs-container :last-child {
   border-right: none;
 
   border-top-right-radius: 15px;
 }
 
-.tab-content-container {
+.how-to-play-container .tab-content-container {
   padding: 1rem 2rem;
 }
 
-.tab-content {
+.how-to-play-container .tab-content {
   display: none;
 }
 
-.tab-content.active-tab-content {
-  display: block;
+.how-to-play-container .tab-content.active-tab-content {
+  display: flex;
+  flex-direction: column;
 }
 
-.how-to-play-container ul {
+.how-to-play-container .how-to-play-container ul {
   list-style: circle;
 }
