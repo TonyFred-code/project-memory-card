@@ -1,4 +1,4 @@
-import { mdiHelp, mdiPlay, mdiCog } from '@mdi/js';
+import { mdiHelp, mdiPlay, mdiCog, mdiCrownCircle } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
@@ -6,12 +6,14 @@ import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
 import SettingsPage from './SettingsPage';
 import GameButton from './GameButton';
+import ScoreHistory from './ScoreHistory';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
     gamePlayPage: false,
     howToPlayPage: false,
     settingsPage: false,
+    scoreHistoryPage: false,
   });
 
   const [bestPerformance, setBestPerformance] = useState({
@@ -116,6 +118,10 @@ function HomePage({ emojis }) {
     );
   }
 
+  if (pageOpen.scoreHistoryPage) {
+    return <ScoreHistory onClose={handlePageClose} sfx={sfx} />;
+  }
+
   return (
     <div className="home-page d-flex__col gap_2r align-items__center justify-content__center">
       <div>
@@ -165,6 +171,21 @@ function HomePage({ emojis }) {
                 <>
                   <Icon path={mdiCog} size={2} />
                   <span className="text-transform__capitalize">settings</span>
+                </>
+              }
+              sfx={sfx}
+            />
+          </li>
+          <li className="d-flex__col align-items__center justify-content__space-around">
+            <GameButton
+              func={() => {
+                handleOpenPage('scoreHistoryPage');
+              }}
+              classNames="btn home-page-btn d-flex__row gap_1r align-items__center"
+              content={
+                <>
+                  <Icon path={mdiCrownCircle} size={2} />
+                  <span className="text-transform__capitalize">Scores</span>
                 </>
               }
               sfx={sfx}
