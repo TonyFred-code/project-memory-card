@@ -7,6 +7,10 @@ import HowToPlay from './HowToPlay';
 import SettingsPage from './SettingsPage';
 import GameButton from './GameButton';
 import ScoreHistory from './ScoreHistory';
+import {
+  scoreHistoryData,
+  calculatePointPerSecond,
+} from '../helpers/scoreHistory';
 
 function HomePage({ emojis }) {
   const [pageOpen, setPageOpen] = useState({
@@ -16,11 +20,7 @@ function HomePage({ emojis }) {
     scoreHistoryPage: false,
   });
 
-  const [bestPerformance, setBestPerformance] = useState({
-    points: 0,
-    time: +Infinity,
-    pts: -Infinity, // points per second
-  });
+  const [scoreHistory, setScoreHistory] = useState(scoreHistoryData);
 
   const [difficulty, setDifficulty] = useState({
     easy: true,
@@ -49,17 +49,33 @@ function HomePage({ emojis }) {
   }
 
   function updatePerformance(points, time) {
-    const floored = Math.floor(time / 1000);
-    const gameTime = floored > 0 ? floored : 1;
-    const pts = points / gameTime;
+    const activeDifficultyScoreHistory = [
+      { points, time },
+      ...scoreHistory[activeDifficulty()],
+    ];
+    const activeDifficultyNextScoreHistory = activeDifficultyScoreHistory
+      .sort((performanceA, performanceB) => {
+        const ptsA = calculatePointPerSecond(
+          performanceA.points,
+          performanceA.time
+        );
 
-    if (Number.isFinite(pts) && pts > bestPerformance.pts) {
-      setBestPerformance({
-        points,
-        time,
-        pts,
-      });
-    }
+        const ptsB = calculatePointPerSecond(
+          performanceB.points,
+          performanceB.time
+        );
+
+        if (ptsA > ptsB) return -1;
+        if (ptsA < ptsB) return 1;
+        return 0;
+      })
+      .slice(0, 5);
+    const updatedScoreHistory = {
+      ...scoreHistory,
+      [activeDifficulty()]: activeDifficultyNextScoreHistory,
+    };
+
+    setScoreHistory(updatedScoreHistory);
   }
 
   function handleOpenPage(name) {
@@ -88,15 +104,23 @@ function HomePage({ emojis }) {
   }
 
   if (pageOpen.gamePlayPage) {
+    const difficultyMode = activeDifficulty();
+    const difficultyBestPerformances = scoreHistory[difficultyMode];
+
+    const [difficultyBestPerformance] = difficultyBestPerformances;
+
     return (
       <GamePlay
         onClose={handlePageClose}
-        highScore={bestPerformance.points}
-        bestTime={bestPerformance.time}
-        bestPointsPerSecond={bestPerformance.pts}
+        highScore={difficultyBestPerformance.points}
+        bestTime={difficultyBestPerformance.time}
+        bestPointsPerSecond={calculatePointPerSecond(
+          difficultyBestPerformance.points,
+          difficultyBestPerformance.time
+        )}
         emojis={emojis}
         onGameEnd={updatePerformance}
-        difficulty={activeDifficulty()}
+        difficulty={difficultyMode}
         sound={sfx}
       />
     );
