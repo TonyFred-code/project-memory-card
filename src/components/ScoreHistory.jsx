@@ -6,6 +6,7 @@ import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
 import GameButton from './GameButton';
 import pageFlipSfx from '../assets/pageturn.mp3';
+import '../styles/ScoreHistory.css';
 
 function ScoreHistory({ onClose, sfx, scoreHistory, activeDifficulty }) {
   const [activeTabKey, setActiveTabKey] = useState(activeDifficulty);
@@ -83,7 +84,7 @@ function ScoreHistory({ onClose, sfx, scoreHistory, activeDifficulty }) {
   }
 
   return (
-    <div className="how-to-play-container d-flex__col">
+    <div className="score-history-container d-flex__col">
       <header className="d-flex__row align-items__center padding_1r">
         <h1 className="margin_lr_centering text-transform__capitalize">
           score history
@@ -109,6 +110,20 @@ function ScoreHistory({ onClose, sfx, scoreHistory, activeDifficulty }) {
         style={{ flex: 1 }}
       >
         <div>
+          <div className="tab-content-container">
+            {tabItems.map((item) => {
+              const { key, children } = item;
+              return (
+                <div
+                  key={key}
+                  className={`tab-content gap_2r padding-left_1r ${activeTabKey === key ? 'active-tab-content' : ''}`}
+                >
+                  {children}
+                </div>
+              );
+            })}
+          </div>
+
           <div className="tabs-container d-flex__row justify-content__space-between">
             {tabItems.map((item) => {
               const { key, label } = item;
@@ -126,20 +141,6 @@ function ScoreHistory({ onClose, sfx, scoreHistory, activeDifficulty }) {
                   tabIndex={0}
                 >
                   {label}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="tab-content-container">
-            {tabItems.map((item) => {
-              const { key, children } = item;
-              return (
-                <div
-                  key={key}
-                  className={`tab-content gap_2r padding-left_1r ${activeTabKey === key ? 'd-flex__col' : ''}`}
-                >
-                  {children}
                 </div>
               );
             })}
