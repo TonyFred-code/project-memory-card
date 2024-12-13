@@ -1,5 +1,5 @@
 .game-area {
-  max-width: 500px;
+  width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -98,5 +98,18 @@
 @media (min-width: 375px) {
   .game-cards {
     --width: 270px;
+  }
+}
+
+@media (min-width: 768px) {
+  .game-area {
+    width: 75%;
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-area {
+    max-width: 750px;
   }
 }
