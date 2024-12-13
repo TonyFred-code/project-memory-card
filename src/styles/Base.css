@@ -149,6 +149,10 @@ button:disabled {
   gap: 2rem;
 }
 
+.padding_d5r {
+  padding: 0.5rem;
+}
+
 .padding_1r {
   padding: 1rem;
 }
