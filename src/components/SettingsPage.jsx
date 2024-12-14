@@ -43,7 +43,6 @@ function SettingsPage({
       playSwitchSfx();
     }
     setActiveSound(event.target.checked);
-    updateSound(event.target.checked);
   }
 
   function handlePageClose() {
