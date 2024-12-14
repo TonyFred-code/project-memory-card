@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import pickRandom from 'pick-random';
 import randomInteger from 'random-int';
-import HomePage from './components/HomePage';
+import HomePage from './pages/HomePage';
 import Loader from './components/Loader';
 import './styles/Base.css';
 
