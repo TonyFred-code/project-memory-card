@@ -6,7 +6,7 @@ import useLocalStorage from 'use-local-storage';
 import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
 import SettingsPage from './SettingsPage';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 import ScoreHistory from './ScoreHistory';
 import {
   scoreHistoryData,

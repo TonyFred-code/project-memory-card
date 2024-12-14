@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useSound from 'use-sound';
 import formatDuration from 'format-duration';
 import { CountUp } from 'use-count-up';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 import pageFlipSfx from '../assets/pageturn.mp3';
 import '../styles/ScoreHistory.css';
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useSound from 'use-sound';
 import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
 import '../styles/HowToPlay.css';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 import pageFlipSfx from '../assets/pageturn.mp3';
 
 function HowToPlay({ onClose, sfx }) {
