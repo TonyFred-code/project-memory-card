@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useSound from 'use-sound';
 import DIFFICULTY_SCORING from '../helpers/difficultyScoring';
 import '../styles/HowToPlay.css';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 import pageFlipSfx from '../assets/pageturn.mp3';
 
 function HowToPlay({ onClose, sfx }) {
@@ -20,8 +20,8 @@ function HowToPlay({ onClose, sfx }) {
       children: (
         <>
           <p>
-            The Memory Card game tests your ability to select unique cards while
-            avoiding repeats. Here&apos;s how to play:
+            Emoji Flippers is a game that tests your ability to select unique
+            cards while avoiding repeats. Here&apos;s how to play:
           </p>
           <ul className="d-flex__col gap_d3r">
             <li>Select a difficulty level to start the game.</li>

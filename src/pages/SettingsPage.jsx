@@ -5,7 +5,7 @@ import '../styles/SettingsPage.css';
 import { useState } from 'react';
 import useSound from 'use-sound';
 import switchSfx from '../assets/pop-sound-effect.mp3';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 
 function SettingsPage({
   sound,

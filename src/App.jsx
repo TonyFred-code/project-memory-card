@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import pickRandom from 'pick-random';
 import randomInteger from 'random-int';
-import HomePage from './components/HomePage';
+import HomePage from './pages/HomePage';
 import Loader from './components/Loader';
 import './styles/Base.css';
 
@@ -38,7 +38,7 @@ function App() {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'X-API-Key': 'e+54iau6M600oDTT3LBh3w==bVb76eh0D03vSEEz',
+          'X-API-Key': import.meta.env.EMOJI_KEY,
         },
       });
 

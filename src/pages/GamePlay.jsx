@@ -21,7 +21,7 @@ import cardFlipSfx from '../assets/flipcard.mp3';
 import gameWinSfx from '../assets/level-win.mp3';
 import uniqueElementPick from '../assets/success_bell.mp3';
 import levelLossSfx from '../assets/game-over-arcade.mp3';
-import GameButton from './GameButton';
+import GameButton from '../components/GameButton';
 import { calculatePointPerSecond } from '../helpers/scoreHistory';
 
 function GamePlay({
@@ -141,7 +141,7 @@ function GamePlay({
         playLevelLoss();
       }
       return;
-    } // game lost
+    }
 
     if (sound) {
       playUniqueCardPick();
@@ -344,7 +344,7 @@ function GamePlay({
       <p className="d-flex__col align-items__center card-count">
         {viewed.length} / {winCardCount}
       </p>
-      {/* todo: style Modal */}
+
       <Modal
         open={gameEndModalOpen}
         center
