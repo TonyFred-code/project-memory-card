@@ -95,6 +95,20 @@
   font-size: 1.8rem;
 }
 
+.modal {
+  border-radius: 8px;
+}
+
+.confirm-action-btn {
+  background-color: red;
+  color: white;
+}
+
+.cancel-action-btn {
+  background-color: blue;
+  color: white;
+}
+
 @media (min-width: 375px) {
   .game-cards {
     --width: 270px;
@@ -105,6 +119,10 @@
   .game-area {
     width: 75%;
     max-width: 450px;
+  }
+
+  .modal {
+    border-radius: 12px;
   }
 }
 
