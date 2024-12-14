@@ -61,6 +61,8 @@ function GamePlay({
   const [playCards, setPlayCards] = useState(
     pickRandom(emojisCode, { count: cardsPerRound })
   );
+  const [requestGameRestart, setRequestGameRestart] = useState(false);
+  const [requestGameEnd, setRequestGameEnd] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
   const [gameEndModalOpen, setGameEndModalOpen] = useState(false);
@@ -81,7 +83,13 @@ function GamePlay({
   const rowCount = Math.sqrt(cardsPerRound);
 
   useEffect(() => {
-    if (gameWon || gameLost || isCardFlipped) {
+    if (
+      gameWon ||
+      gameLost ||
+      isCardFlipped ||
+      requestGameEnd ||
+      requestGameRestart
+    ) {
       return undefined;
     }
 
@@ -92,7 +100,7 @@ function GamePlay({
     return () => {
       clearInterval(key);
     };
-  }, [gameLost, gameWon, isCardFlipped]);
+  }, [gameLost, gameWon, isCardFlipped, requestGameEnd, requestGameRestart]);
 
   function handleGameEnd(points) {
     const pts = calculatePointPerSecond(points, time);
@@ -119,6 +127,7 @@ function GamePlay({
       setLastScoreTime(0);
       setScore(0);
       setScoreIncrease(0);
+      setRequestGameRestart(false);
     }, 1300);
   }
 
@@ -201,7 +210,9 @@ function GamePlay({
         <GameButton
           classNames="btn btn-icon d-flex__row gap_1r align-items__center"
           sfx={sound}
-          func={handleGameRestart}
+          func={() => {
+            setRequestGameRestart(true);
+          }}
           content={
             <>
               <span className="icon-container">
@@ -230,7 +241,9 @@ function GamePlay({
         <GameButton
           sfx={sound}
           classNames="btn btn-icon"
-          func={handlePageClose}
+          func={() => {
+            setRequestGameEnd(true);
+          }}
           content={
             <>
               <span className="icon-container">
@@ -337,8 +350,9 @@ function GamePlay({
         center
         showCloseIcon={false}
         blockScroll={false}
+        classNames={{ modal: 'modal' }}
       >
-        <div className="modal d-flex__col gap_2r padding_1r">
+        <div className="d-flex__col gap_2r padding_1r">
           <header>
             {gameLost && (
               <h1 className="text-transform__capitalize">
@@ -348,7 +362,7 @@ function GamePlay({
 
             {gameWon && (
               <h1 className="text-transform__capitalize">
-                <span>congratulations! you won</span>
+                <span>yay! you won</span>
               </h1>
             )}
           </header>
@@ -406,6 +420,60 @@ function GamePlay({
               }}
               classNames=""
               content={<span> Main Menu</span>}
+              sfx={sound}
+            />
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={requestGameEnd || requestGameRestart}
+        center
+        showCloseIcon={false}
+        blockScroll={false}
+        classNames={{ modal: 'modal' }}
+      >
+        <div className="d-flex__col gap_2r padding_1r">
+          <header>
+            <h1 className="text-transform__capitalize">
+              <span>Confirm Action</span>
+            </h1>
+          </header>
+          <div className="d-flex__col justify-content__center gap_1r">
+            {requestGameRestart && (
+              <p>Are you sure you want to restart game?</p>
+            )}
+
+            {requestGameEnd && <p>Are you sure you want to end game?</p>}
+            <p>Progress will be lost. And will not be saved.</p>
+          </div>
+          <div className="btn-group d-flex__row gap_2r align-items__center justify-content__space-around">
+            <GameButton
+              func={() => {
+                if (requestGameEnd) {
+                  setRequestGameEnd(false);
+                }
+
+                if (requestGameRestart) {
+                  setRequestGameRestart(false);
+                }
+              }}
+              classNames="cancel-action-btn btn"
+              content={<span>Cancel</span>}
+              sfx={sound}
+            />
+            <GameButton
+              func={() => {
+                if (requestGameEnd) {
+                  handlePageClose();
+                }
+
+                if (requestGameRestart) {
+                  handleGameRestart();
+                }
+              }}
+              classNames="confirm-action-btn btn"
+              content={<span>Confirm</span>}
               sfx={sound}
             />
           </div>
