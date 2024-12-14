@@ -2,6 +2,7 @@ import { mdiHelp, mdiPlay, mdiCog, mdiCrownCircle } from '@mdi/js';
 import Icon from '@mdi/react';
 import '../styles/HomePage.css';
 import { useState } from 'react';
+import useLocalStorage from 'use-local-storage';
 import GamePlay from './GamePlay';
 import HowToPlay from './HowToPlay';
 import SettingsPage from './SettingsPage';
@@ -20,14 +21,17 @@ function HomePage({ emojis }) {
     scoreHistoryPage: false,
   });
 
-  const [scoreHistory, setScoreHistory] = useState(scoreHistoryData);
+  const [scoreHistory, setScoreHistory] = useLocalStorage(
+    'score_history',
+    scoreHistoryData
+  );
 
-  const [difficulty, setDifficulty] = useState({
+  const [difficulty, setDifficulty] = useLocalStorage('difficulty_settings', {
     easy: true,
     medium: false,
     hard: false,
   });
-  const [sfx, setSfx] = useState(true);
+  const [sfx, setSfx] = useLocalStorage('sfx', true);
 
   function updateDifficulty(nextDifficulty) {
     setDifficulty({ ...nextDifficulty });
