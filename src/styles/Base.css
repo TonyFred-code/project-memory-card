@@ -25,6 +25,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --webkit-tap-highlight-color: transparent; /* for removing the highlight */
   min-height: 100dvh;
 }
 
@@ -68,6 +69,10 @@ button:disabled {
   outline: none;
   cursor: not-allowed;
   border: none;
+}
+
+table {
+  width: 100%;
 }
 
 .icon-container {
@@ -146,6 +151,10 @@ button:disabled {
 
 .gap_2r {
   gap: 2rem;
+}
+
+.padding_d5r {
+  padding: 0.5rem;
 }
 
 .padding_1r {

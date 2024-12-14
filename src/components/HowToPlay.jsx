@@ -176,7 +176,7 @@ function HowToPlay({ onClose, sfx }) {
               return (
                 <div
                   key={key}
-                  className={`tab-content gap_2r padding-left_1r ${activeTabKey === key ? 'd-flex__col' : ''}`}
+                  className={`tab-content gap_2r padding-left_1r ${activeTabKey === key ? 'active-tab-content' : ''}`}
                 >
                   {children}
                 </div>
