@@ -38,7 +38,7 @@ function App() {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'X-API-Key': 'e+54iau6M600oDTT3LBh3w==bVb76eh0D03vSEEz',
+          'X-API-Key': import.meta.env.EMOJI_KEY,
         },
       });
 
