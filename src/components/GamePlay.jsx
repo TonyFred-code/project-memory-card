@@ -141,7 +141,7 @@ function GamePlay({
         playLevelLoss();
       }
       return;
-    } // game lost
+    }
 
     if (sound) {
       playUniqueCardPick();
@@ -344,7 +344,7 @@ function GamePlay({
       <p className="d-flex__col align-items__center card-count">
         {viewed.length} / {winCardCount}
       </p>
-      {/* todo: style Modal */}
+
       <Modal
         open={gameEndModalOpen}
         center
