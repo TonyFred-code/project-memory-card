@@ -26,6 +26,7 @@
     "react-spinners": "^0.14.1",
     "reactjs-flip-card": "^2.0.3",
     "use-count-up": "^3.0.1",
+    "use-local-storage": "^3.0.0",
     "use-sound": "^4.0.3"
   },
   "devDependencies": {
