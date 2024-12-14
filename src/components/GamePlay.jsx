@@ -22,6 +22,7 @@ import gameWinSfx from '../assets/level-win.mp3';
 import uniqueElementPick from '../assets/success_bell.mp3';
 import levelLossSfx from '../assets/game-over-arcade.mp3';
 import GameButton from './GameButton';
+import { calculatePointPerSecond } from '../helpers/scoreHistory';
 
 function GamePlay({
   onClose,
@@ -94,9 +95,7 @@ function GamePlay({
   }, [gameLost, gameWon, isCardFlipped]);
 
   function handleGameEnd(points) {
-    const floored = Math.floor(time / 1000);
-    const gameTime = floored > 0 ? floored : 1;
-    const pts = points / gameTime;
+    const pts = calculatePointPerSecond(points, time);
 
     setIsHigherPerformance(pts > bestPointsPerSecond);
     setGameEndModalOpen(true);
